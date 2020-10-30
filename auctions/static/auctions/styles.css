@@ -1,0 +1,69 @@
+* {
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+}
+
+body {
+    padding: 10px;
+}
+
+.header {
+    text-align: center;
+    background-color: #569fe3;
+    padding: 20px;
+}
+
+.form-wrapper
+{
+    display: block;
+    text-align: center;
+}
+
+table {
+    margin-top: 10px;
+}
+
+form
+{
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    text-align: left;
+    width: 70%;
+}
+
+.form-inline .form-group {
+    margin-left: 0;
+}
+
+.nav {
+    background-color: #333b42;
+}
+
+a, a:hover {
+    text-decoration: none;
+    color: blue;
+}
+
+.card-img-top{
+    margin: 2px;
+    max-width: 90%;    
+}
+
+.card-img-top .not-found{
+    height: 30vh;
+    object-fit: scale-down;
+}
+
+.listing_img {
+    min-width: 0;
+    min-height: 0;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.subheading {
+    color: gray;
+}

@@ -1,0 +1,39 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <hr>
+    <div class="card-columns">
+
+        {% for x in listings %}
+            <div class="card border-dark">
+
+                <!-- image url check -->
+                {% if x.img_url|length %}
+                    <img class="card-img-top" src="{{ x.img_url }}" alt="Card image cap">
+                {% else %}
+                    <img class="card-img-top not-found" src="https://us.123rf.com/450wm/pe3check/pe3check1710/pe3check171000054/88673746-stock-vector-no-image-available-sign-internet-web-icon-to-indicate-the-absence-of-image-until-it-will-be-download.jpg?ver=6" alt="Card image cap">
+                {% endif %}
+                
+                <hr>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{% url 'listing' x.id %}"> {{ x.title }} </a></h5>
+                    <p class="card-text"> {{ x.description }} </p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"> 
+                            {% if x.current_bid == -1 %}
+                                <span class="subheading"> Starting Bid: (No bids yet)</span> INR {{ x.starting_bid }} 
+                            {% else %}
+                                <span class="subheading"> Current Bid:</span> INR {{ x.current_bid }}
+                            {% endif %}
+                        </li>
+                        <li class="list-group-item"><span class="subheading">by:</span> {{ x.owner.username }} </li>
+                        <li class="list-group-item"><span class="subheading">Category:</span> {{ x.category.category_name }}</li>
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>   
+
+{% endblock %}

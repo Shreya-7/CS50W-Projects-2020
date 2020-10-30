@@ -1,0 +1,128 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+    <!-- for an inactive listing -->
+    {% if not item.is_active %}
+        <div class="alert alert-warning"> This auction has been closed </div>
+        <!-- if the user if the winner of this inactive listing -->
+        {% if item.winner.id == request.user.id %}
+            <div class="alert alert-info"> You won this item.Congrats! </div>
+        {% endif %}
+    {% endif %}
+
+    <div class="container">
+        <div class="row justify-content-around">
+            <div class=" card col-lg-4 col-s-12">
+
+                <!-- image url check -->
+                {% if item.img_url|length %}
+                    <img src="{{ item.img_url }}" alt="Card image cap" class="card-img-top listing_img">
+                {% else %}
+                    <img class="card-img-top listing_img" src="https://us.123rf.com/450wm/pe3check/pe3check1710/pe3check171000054/88673746-stock-vector-no-image-available-sign-internet-web-icon-to-indicate-the-absence-of-image-until-it-will-be-download.jpg?ver=6" alt="Card image cap">
+                {% endif %}
+            </div>
+            <div class="card col-lg-8 col-s-12">
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{% url 'listing' item.id %}"> {{ item.title }} </a></h5>
+                    <p class="card-text"> {{ item.description }} </p>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item"><span class="subheading">by:</span>  {{ item.owner.username }} </li>
+                        <li class="list-group-item"><span class="subheading">Category:</span> {{ item.category.category_name }}</li>
+                        <li class="list-group-item"><span class="subheading">Starting Bid:</span> INR {{item.starting_bid}} </li>
+                        <li class="list-group-item"> 
+                            {% if item.current_bid == -1 %}
+                                There have been no bids yet.
+                            {% else %}
+                            <span class="subheading">Current Bid:</span> INR {{ item.current_bid }}
+                            {% endif %}
+                        </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <!-- actions for when a user if logged in -->
+                    {% if user.is_authenticated %}
+
+                        <!-- watchlisting for an active listing by a non-owner -->
+                        {% if request.user.id != item.owner.id and item.is_active %}
+                            <form action="{% url 'watch' item.id %}" method="POST">
+                                {% csrf_token %}
+                                {% if not watching %}
+                                    <button type="submit" class="btn btn-primary"> Watch </button> 
+                                {% else %}
+                                    <button type="submit" class="btn btn-secondary"> Unwatch </button>
+                                {% endif %}
+                            </form>
+                        
+                        <!-- closing the auction by owner -->
+                        {% elif item.is_active %}
+                            <form action="{% url 'close' item.id %}">
+                                <button type="submit" class="btn btn-success"> Close this auction </button>
+                            </form>
+                        {% endif %}
+
+                        <!-- bidding for an active listing by a non-owner, can be clubbed with above if-->
+                        {% if request.user.id != item.owner.id and item.is_active %}
+                            <form action="{% url 'bid' item.id %}" method="POST">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <input type="text" name="bid" placeholder="Enter your bid in INR" class="form-control">
+                                </div>
+                                <button type="submit" class="btn btn-primary"> Bid </button>
+                            </form>
+                        {% endif %}
+
+                    {% else %}
+                        <div> Sign in to watchlist, comment and bid on items.</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- comments area -->
+        <div class="row">
+            <div class="col-12">
+
+                <!-- adding comments by a logged in user -->
+                {% if user.is_authenticated %}
+                    <form action="{% url 'comment' item.id %}" method="POST">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" name="comment" placeholder="Add a comment..." class="form-control">                            
+                        </div>
+                        <button type="submit" class="btn btn-primary"> Add Comment </button>
+                    </form>
+                {% endif %}
+
+            <!-- listing comments -->
+            </div>
+            <div class="col-12">
+                <table class="table table-striped">
+                    <tbody>
+                        {% for x in comments %}
+
+                            <!-- check if user is the commentor -->
+                            {% if x.user.id == request.user.id %}
+                                <tr class="table-primary"> 
+                                    <td> You said: </td>
+                                    <td> {{ x.comment }} </td>
+                                </tr>
+                            {% else %}
+                                <tr>
+                                    <td> 
+                                        <!-- check if commentor is the owner -->
+                                        {% if item.owner.id == x.user.id %}
+                                            <span class="subheading">(owner)</span>
+                                        {% endif %}
+                                        {{ x.user.username }} said: 
+                                    </td>
+                                    <td> {{ x.comment }} </td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}  
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>    
+
+{% endblock %}
