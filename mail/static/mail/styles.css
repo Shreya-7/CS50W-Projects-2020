@@ -1,0 +1,30 @@
+textarea {
+    min-height: 400px;
+}
+
+h3 {
+    margin: 10px;
+}
+
+a {
+    cursor: pointer;
+}
+
+.mailbox-email {
+    padding: 10px;
+    border: 2px black;
+}
+
+.mailbox-sender {
+    font-weight: bold;
+}
+
+.mailbox-time {
+    color: #0085ff;
+}
+
+#email-header ul{
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+}
