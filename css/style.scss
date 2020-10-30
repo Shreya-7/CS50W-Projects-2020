@@ -1,0 +1,113 @@
+$yearFont: 20px;
+
+.container, .row, img
+{
+    width:100%;
+    margin: 15px;
+}
+
+.images
+{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+}
+
+.images div
+{
+    height: 40%;
+}
+
+img
+{
+    border: solid 2px gray;
+}
+
+@media (max-width: 500px)
+{
+    .images
+    {
+        flex-direction: row;
+    }
+}
+
+a, a:hover
+{
+    color: #313030;
+    text-decoration: none;
+}
+
+#main
+{
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-direction: column;
+    font-size: 25px;
+    color: #545252;
+}
+
+ul li
+{
+    font-size: 20px;
+}
+
+%all-albums
+{
+    width: 200px;
+    height: auto;
+    padding: 20px;
+    border: solid 0.5px gray;
+    text-align: center;
+}
+
+.albums
+{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    > div
+    {
+        @extend %all-albums;
+    }
+    > div:hover .year
+    {
+        display: block;
+    }
+    > div:hover 
+    {
+        font-size: $yearFont;
+    }
+}
+
+.year
+{
+    display: none;
+    text-align: center;
+}
+
+.room
+{
+    background-color: #f2a47a;
+}
+.heavier
+{
+    background-color :#5f8d9a;
+}
+.continuum
+{
+    background-color: #20B2AA;
+}
+.battle
+{
+    background-color: #eee298;
+}
+.born
+{
+    background-color: coral;
+}
+.search
+{
+    background-color: whitesmoke;
+}
