@@ -1,0 +1,44 @@
+.body {
+  background-color: black;
+  padding: 20px;
+}
+
+h1,
+h2 {
+  color: blue;
+  padding: 5px;
+}
+
+form {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+button {
+  padding: 1px 5px 1px 5px !important;
+  margin-left: 5px !important;
+}
+
+.card,
+#follow-btn {
+  margin-bottom: 10px;
+}
+
+.card-body {
+  padding-bottom: 5px !important;
+}
+
+.edit-area {
+  display: none;
+}
+
+#follows {
+  color: blue;
+  margin-bottom: 10px;
+}
+
+#followers,
+#following {
+  color: white;
+  font-weight: bold;
+}

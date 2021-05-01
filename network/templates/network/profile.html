@@ -1,0 +1,108 @@
+{% extends "network/layout.html" %}
+
+{% block title %} Social Network - {{ user_profile.username }} {% endblock %}
+
+{% block body %}
+
+<div id="follows">
+    Followers: <span id="followers">{{ user_profile.follower_count }}</span>
+    Following: <span id="following">{{ user_profile.following_count }}</span>
+</div>
+
+<!-- Follow/Unfollow toggle button-->
+{% if request.user.is_authenticated and request.user.id != user_profile.id %}
+    <button id='follow-btn' data-username="{{ user_profile.username }}" class="btn btn-primary">
+        {% if following %}
+        Unfollow
+        {% else %}
+        Follow
+        {% endif %}
+    </button>
+{% endif %}
+
+<div class="posts">
+
+    {% for post in posts %}
+
+    <div class="card post" id="post_{{ post.id }}">
+
+        <h5 class="card-header">
+            <a class="user_profile" href="{% url 'profile' post.poster.username %}">{{ post.poster.username }}</a>
+        </h5>
+
+        <div class="card-body">
+
+            <h6 class="card-subtitle mb-2 text-muted">{{ post.timestamp }}</h6>
+
+            <p class="card-text" id="post_content_{{ post.id }}">
+                {{ post.content }}
+            </p>
+
+            <!-- edit form -->
+            <div class="edit-area" id="edit_area_{{ post.id }}">
+                <form class="edit-post-form" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <textarea name="content" id="edit_content_{{ post.id }}" class="form-group"
+                            required>{{ post.content }}</textarea>
+                    </div>
+                    <button class='edit-btn btn btn-primary' data-post_id="{{ post.id }}" type="submit">Edit</button>
+                </form>
+            </div>
+
+        </div>
+        {% if request.user.is_authenticated %}
+            <div class="card-body">
+                <span class="card-text" id="like_{{ post.id }}">{{ post.likes }} </span> like(s)
+                <a class="card-link">
+                    <button class='like-btn btn btn-primary' data-post_id="{{ post.id }}">
+                        {% if request.user in post.likers.all %}
+                        Unlike
+                        {% else %}
+                        Like
+                        {% endif %}
+                    </button>
+                </a>
+                <!-- edit area -->
+                {% if request.user.id == post.poster.id %}
+                <a class="card-link">
+                    <!-- edit link -->
+                    <button class="edit-link btn btn-primary" data-post_id="{{ post.id }}">Edit</button>
+                </a>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<nav>
+    <ul class="pagination">
+
+        {% if posts.has_previous %}
+
+        <li class="page-item">
+            <a href="?page=1" class="page-link">&laquo; First</a>
+        </li>
+
+        <li>
+            <a href="?page={{ posts.previous_page_number }}" class="page-link">Previous</a>
+        </li>
+
+        {% endif %}
+
+        {% if posts.has_next %}
+
+        <li class="page-item">
+            <a href="?page={{ posts.next_page_number }}" class="page-link">Next</a>
+        </li>
+
+        <li>
+            <a href="?page={{ posts.paginator.num_pages }}" class="page-link">Last &raquo;</a>
+        </li>
+
+        {% endif %}
+    </ul>
+</nav>
+
+{% endblock %}
